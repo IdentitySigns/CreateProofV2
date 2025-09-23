@@ -33,6 +33,7 @@ async function jobArrived(s, flowElement, job) {
         let previewImageSrc = (await flowElement.getPropertyStringValue("previewImageSrc"));
         // get the jobs dataset path
         const standardizedDataPath = await job.getDataset("standardizedData", AccessLevel.ReadOnly);
+        const revisionDataPath = await job.getDataset("revisionData", AccessLevel.ReadOnly);
         if (!previewImageSrc) {
             await job.log(LogLevel.Error, "** There was no Preview Image Src.");
         }
@@ -41,12 +42,17 @@ async function jobArrived(s, flowElement, job) {
         }
         // Read the file synchronously
         const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
+        const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
         const standardizedData = JSON.parse(jsonData);
+        const revisionData = JSON.parse(revisionJsonData);
         if (!standardizedData) {
             await job.log(LogLevel.Error, "** No Standardized data could be found");
         }
+        if (!revisionData) {
+            await job.log(LogLevel.Error, "** No Revision data could be found");
+        }
         // Build HTML
-        const builtHtml = (0, createProofHtml_1.createProofHtml)(standardizedData, previewImageSrc);
+        const builtHtml = (0, createProofHtml_1.createProofHtml)(standardizedData, revisionData, previewImageSrc);
         // Create a temporary file to store the HTML
         const tempFile = tmp.fileSync({ postfix: ".html" });
         // Write the HTML content to the temp file
@@ -58,7 +64,8 @@ async function jobArrived(s, flowElement, job) {
         // Clean up temporary file
         fs.unlinkSync(tempFile.name);
         // Remove original after children have been created and dispatched
-        await job.sendToNull();
+        // await job.sendToNull(); // comment out for dev
+        await job.sendToData(Connection.Level.Error);
     }
     catch (error) {
         await job.log(LogLevel.Error, "There was an error: " + error);
