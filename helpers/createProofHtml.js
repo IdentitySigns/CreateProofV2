@@ -59,7 +59,7 @@ const createProofHtml = (data, previewImageSrc) => {
         <div class=extension_line>
         <img class="dim_arrow one" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
-        <p class=dim_number>${data.itemInfo.itemHeight}</p>
+        <p class=dim_number>${data.itemInfo.itemWidth}</p>
         <div class=extension_line>
         <img class="dim_arrow two" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
@@ -68,7 +68,7 @@ const createProofHtml = (data, previewImageSrc) => {
         <div class=extension_line>
         <img class="dim_arrow three" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
-        <p class=dim_number>${data.itemInfo.itemWidth}</p>
+        <p class=dim_number>${data.itemInfo.itemHeight}</p>
         <div class=extension_line>
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
