@@ -64,7 +64,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
             ${returnStyles()}
             </style>
     </head>
-    <body>
+    <body class="id_wo_body">
         <div class=id_wo_inner>
         <div class=id_wo_artwork_side>
         <div class=id_wo_artwork_section>
