@@ -961,7 +961,3 @@ export const imageLib = [
     name: "Gerber 220-27 Navy",
   },
 ];
-
-
-//<img src="{{media url=.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/wo-image-gerber-220-27-navy.png}}" alt="" />
-//<img src="{{media url=.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/wo-image-gerber-220-27-navy.png}}" alt="" />

@@ -46,6 +46,10 @@ const styles_js_1 = require("./styles.js");
 // ]
 const createProofHtml = (data, revisionData, previewImageSrc) => {
     var _a, _b, _c, _d;
+    function returnShortName(fullname) {
+        let a = fullname.split(' ');
+        return `${a[0][0]}${a[1][0]}`.toUpperCase();
+    }
     return `
     <!doctype html>
     <html lang=en>
@@ -61,7 +65,7 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
             ${(0, styles_js_1.returnStyles)()}
             </style>
     </head>
-    <body class="id_wo_body">
+    <body id="id_wo_body">
         <div class=id_wo_inner>
         <div class=id_wo_artwork_side>
         <div class=id_wo_artwork_section>
@@ -84,16 +88,16 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
         </div>
-        <img src="${previewImageSrc}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
+        <img src="file:${previewImageSrc}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
         <p class="preview_quantity">${data.itemInfo.itemQuantity}x</p>
         </div>
-        <p class="page_number">Page: ${data.itemInfo.itemNumber}</p>
+        <!-- <p class="page_number">Page: ${data.itemInfo.itemNumber}</p> -->
         </div>
         <div class=id_wo_footer_section>
         <div class=wo_f_top_section>
         <div class=job_info_cont>
         <p><span class=large>${data.orderInfo.orderNumber}</span></p>
-        <div class=item_spacer><small>ITEM</small></div>
+        <div class=item_spacer><small>ITEM</small><p>${data.itemInfo.itemNumber}</p></div>
         <p><span class=med>${data.itemInfo.itemName} - ${data.itemInfo.itemQuantity}x</span></p>
         </div>
         <div class=job_info_ender>
@@ -187,7 +191,7 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
             <small>${(0, helpers_js_1.formatISODateToMMDDYY)(r === null || r === void 0 ? void 0 : r.revisionDate)}</small>
             </div>
             <div class=revision_table_cell><small>${(r === null || r === void 0 ? void 0 : r.revisionNumber) || "NA"}</small></div>
-            <div class=revision_table_cell><small>${(r === null || r === void 0 ? void 0 : r.submitter.slice(0, 2).toUpperCase()) || "NA"}</small></div>
+            <div class=revision_table_cell><small>${returnShortName(r === null || r === void 0 ? void 0 : r.submitter) || "NA"}</small></div>
             </div>`)).join('')}
         </div>
         </div>

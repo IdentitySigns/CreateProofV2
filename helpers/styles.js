@@ -307,6 +307,10 @@ const returnStyles = () => {
         }
         .item_spacer {
         padding: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         height: 80%;
         color: var(--id-white);
         background-color: var(--id-gray);
