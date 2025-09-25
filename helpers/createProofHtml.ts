@@ -151,7 +151,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=wo_f_bt_col_header>
         <small>Shipping</small>
         </div>
-        <div class=wo_f_bt_col_body>
+        <div class="wo_f_bt_col_body delivery_info">
             ${data.orderInfo.orderDeliveryInfo && data.orderInfo.orderDeliveryInfo.map((info: any) => (
                 `<p class=id_po_text>• ${info.name}</p>`
             )).join('')}
