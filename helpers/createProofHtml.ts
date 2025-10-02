@@ -12,6 +12,9 @@ import { returnStyles } from './styles.js'
 //         itemDescription: "",
 //         itemMaterialSpecifications: [],
 //         itemDesigner: "",
+//         itemCustomerNotes: "",
+//         itemAccessories: [],
+//         itemHaveUsDesignNotes: {}
 //     },
 //     orderInfo: {
 //         orderClientName: "",

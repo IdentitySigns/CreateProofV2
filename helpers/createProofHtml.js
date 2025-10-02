@@ -15,6 +15,9 @@ const styles_js_1 = require("./styles.js");
 //         itemDescription: "",
 //         itemMaterialSpecifications: [],
 //         itemDesigner: "",
+//         itemCustomerNotes: "",
+//         itemAccessories: [],
+//         itemHaveUsDesignNotes: {}
 //     },
 //     orderInfo: {
 //         orderClientName: "",
