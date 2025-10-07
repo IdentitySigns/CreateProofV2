@@ -118,7 +118,7 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         </div>
         </div>
         <div class=wo_f_bt_section>
-        <div class=wo_f_bt_col>
+        <div class="wo_f_bt_col" id="color_specs_container">
         <div class=wo_f_bt_col_header>
         <small>Color Specifications</small>
         </div>

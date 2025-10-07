@@ -397,8 +397,11 @@ body {
 .wo_f_bt_col_body > p.id_po_text {
   padding: 0.75rem;
 }
+#color_specs_container {
+  max-width: 15%;
+}
 
-.color_specs{
+.color_specs {
   align-items: center;
 }
 
@@ -408,7 +411,7 @@ body {
   gap: 4px;
   max-width: 250px;
 }
-.description{
+.description {
   font-size: smaller;
   padding: 0;
 }
@@ -433,6 +436,7 @@ body {
 .wo_f_bt_col_body_img_cont > .id_po_text {
   max-width: 100px;
   font-size: smaller;
+  padding-left: 0.5rem;
 }
 
 .wo_f_bt_col_body_img {
@@ -440,12 +444,15 @@ body {
   border-radius: 0.25rem;
 }
 
-#material_specs{
-flex-wrap: wrap;  
+#material_specs {
+  flex-wrap: wrap;
 }
 
-#material_specs .wo_f_bt_col_body_img_cont{
+#material_specs .wo_f_bt_col_body_img_cont {
   height: max-content;
+}
+#material_specs .wo_f_bt_col_body_img_cont:first-of-type {
+  padding: 0;
 }
 
 .standard_divider {
