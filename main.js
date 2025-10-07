@@ -42,6 +42,7 @@ async function jobArrived(s, flowElement, job) {
         }
         // Read the file synchronously
         const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
+        await job.log(LogLevel.Info, `Dataset Path: ${standardizedDataPath}`);
         const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
         const standardizedData = JSON.parse(jsonData);
         const revisionData = JSON.parse(revisionJsonData);
@@ -53,6 +54,8 @@ async function jobArrived(s, flowElement, job) {
         }
         // Build HTML
         const builtHtml = (0, createProofHtml_1.createProofHtml)(standardizedData, revisionData, previewImageSrc);
+        // log proof HTML for dev
+        await job.log(LogLevel.Info, `Here is the Proof HTML -> ${builtHtml}`);
         // Create a temporary file to store the HTML
         const tempFile = tmp.fileSync({ postfix: ".html" });
         // Write the HTML content to the temp file

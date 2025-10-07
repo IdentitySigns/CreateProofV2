@@ -17,12 +17,14 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     if (!previewImageSrc) {
       await job.log(LogLevel.Error, "** There was no Preview Image Src.")
     }
+
     if (!standardizedDataPath) {
       await job.log(LogLevel.Error, "** Could not find the path for the standardized data")
     }
 
     // Read the file synchronously
     const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
+    await job.log(LogLevel.Info, `Dataset Path: ${standardizedDataPath}`)
     const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
 
     const standardizedData = JSON.parse(jsonData);
@@ -38,6 +40,9 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
 
     // Build HTML
     const builtHtml = createProofHtml(standardizedData, revisionData, previewImageSrc)
+
+    // log proof HTML for dev
+    await job.log(LogLevel.Info, `Here is the Proof HTML -> ${builtHtml}`)
 
     // Create a temporary file to store the HTML
     const tempFile = tmp.fileSync({ postfix: ".html" });

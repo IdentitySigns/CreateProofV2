@@ -48,10 +48,20 @@ const styles_js_1 = require("./styles.js");
 //     }
 // ]
 const createProofHtml = (data, revisionData, previewImageSrc) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     function returnShortName(fullname) {
-        let a = fullname.split(' ');
-        return `${a[0][0]}${a[1][0]}`.toUpperCase();
+        if (!fullname)
+            return "NA";
+        const name = fullname.trim();
+        // If it looks like an email, use first two letters of the local part
+        if (name.includes("@")) {
+            const local = name.split("@")[0];
+            return (local.slice(0, 2) || "NA").toUpperCase();
+        }
+        const parts = name.split(/\s+/).filter(Boolean);
+        if (parts.length === 1)
+            return (parts[0].slice(0, 2) || "NA").toUpperCase();
+        return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
     }
     return `
     <!doctype html>
@@ -91,7 +101,7 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
         </div>
-        <img src="file:${previewImageSrc}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
+        <img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
         <p class="preview_quantity">${data.itemInfo.itemQuantity}x</p>
         </div>
         <!-- <p class="page_number">Page: ${data.itemInfo.itemNumber}</p> -->
@@ -112,7 +122,7 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         <div class=wo_f_bt_col_header>
         <small>Color Specifications</small>
         </div>
-        <div class=wo_f_bt_col_body>
+        <div class="wo_f_bt_col_body color_specs">
         <div class=wo_f_bt_col_body_img_cont>
         <img class=wo_f_bt_col_body_img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/full-color-print-2.png alt="Color Specs">
         <p class=id_po_text>Full Color Print</p>
@@ -123,36 +133,56 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         <div class=wo_f_bt_col_header>
         <small>Material Specifications</small>
         </div>
-        <div class=wo_f_bt_col_body>
-        ${data.itemInfo.itemMaterialSpecifications[0].children.map((cc) => {
-        if (cc.variableName === 'Machine') {
-            return null;
-        }
-        return `
-                <div class=wo_f_bt_col_body_img_cont id="${cc.variableName}">
-                <img class=wo_f_bt_col_body_img src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${(0, helpers_js_1.findAssetImg)(cc.name)}" alt="${cc.name}">
-                <p class=id_po_text>${cc.name}</p>
+        <div class="wo_f_bt_col_body" id="material_specs">
+       
+
+     ${((_d = (_c = (_b = (_a = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _a === void 0 ? void 0 : _a.itemMaterialSpecifications) === null || _b === void 0 ? void 0 : _b[0]) === null || _c === void 0 ? void 0 : _c.children) !== null && _d !== void 0 ? _d : [])
+        .filter((cc) => (cc === null || cc === void 0 ? void 0 : cc.variableName) !== 'Machine')
+        .map((cc) => `
+                <div class="wo_f_bt_col_body_img_cont" id="${cc.variableName}">
+                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${(0, helpers_js_1.findAssetImg)(cc.name)}" alt="${cc.name}">
+                <p class="id_po_text">${cc.name}</p>
                 </div>
-            `;
-    })
-        .join("")}
-        
+            `)
+        .join('')}
+    
         </div>
         </div>
+        ${data.itemInfo.itemDescription ? `
         <div class=wo_f_bt_col>
         <div class=wo_f_bt_col_header>
         <small>Description</small>
         </div>
         <div class=wo_f_bt_col_body>
-        <p class=id_po_text>${(0, helpers_js_1.stripHTMLDoc)(data.itemInfo.itemDescription)}</p>
+        <p class=id_po_text description>${(0, helpers_js_1.stripHTMLDoc)(data.itemInfo.itemDescription)}</p>
         </div>
-        </div>
+        </div>`
+        :
+            ""}
         <div class=wo_f_bt_col>
         <div class=wo_f_bt_col_header>
         <small>Shipping</small>
         </div>
+        
         <div class="wo_f_bt_col_body delivery_info">
-            ${data.orderInfo.orderDeliveryInfo && data.orderInfo.orderDeliveryInfo.map((info) => (`<p class=id_po_text>• ${info.name}</p>`)).join('')}
+        ${Array.isArray((_e = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _e === void 0 ? void 0 : _e.orderDeliveryInfo)
+        ? data.orderInfo.orderDeliveryInfo
+            .map((info) => {
+            // Handle both string or object types safely
+            const text = typeof info === "string" ? info : (info === null || info === void 0 ? void 0 : info.name) || "";
+            // Split on actual newline characters
+            if (text.includes("\n")) {
+                return text
+                    .split(/\n+/) // <-- ✅ actual regex, not string
+                    .map((line) => `<p class="id_po_text">${line.trim()}</p>`)
+                    .join("");
+            }
+            else {
+                return `<p class="id_po_text">• ${text.trim()}</p>`;
+            }
+        })
+            .join("")
+        : ""}
         </div>
         </div>
         </div>
@@ -175,8 +205,8 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         
         <p class="id_po_text strong">Contact</p>
         <p class=id_po_text>${data.orderInfo.contactName || "NA"}</p>
-        ${((_a = data.orderInfo) === null || _a === void 0 ? void 0 : _a.contactPhone) ? `<p class=id_po_text>${(_b = data.orderInfo) === null || _b === void 0 ? void 0 : _b.contactPhone}</p>` : ""}
-        ${((_c = data.orderInfo) === null || _c === void 0 ? void 0 : _c.contactEmail) ? `<p class=id_po_text>${(_d = data.orderInfo) === null || _d === void 0 ? void 0 : _d.contactEmail}</p>` : ""}
+        ${((_f = data.orderInfo) === null || _f === void 0 ? void 0 : _f.contactPhone) ? `<p class=id_po_text>${(_g = data.orderInfo) === null || _g === void 0 ? void 0 : _g.contactPhone}</p>` : ""}
+        ${((_h = data.orderInfo) === null || _h === void 0 ? void 0 : _h.contactEmail) ? `<p class=id_po_text>${(_j = data.orderInfo) === null || _j === void 0 ? void 0 : _j.contactEmail}</p>` : ""}
 
         </div>
         <div class=standard_divider></div>

@@ -51,10 +51,21 @@ import { returnStyles } from './styles.js'
 
 export const createProofHtml = (data: any, revisionData: any, previewImageSrc: string) => {
 
-    function returnShortName(fullname:string) {
-        let a = fullname.split(' ')
-        return `${a[0][0]}${a[1][0]}`.toUpperCase()
+    function returnShortName(fullname?: string) {
+        if (!fullname) return "NA";
+        const name = fullname.trim();
+
+        // If it looks like an email, use first two letters of the local part
+        if (name.includes("@")) {
+            const local = name.split("@")[0];
+            return (local.slice(0, 2) || "NA").toUpperCase();
+        }
+
+        const parts = name.split(/\s+/).filter(Boolean);
+        if (parts.length === 1) return (parts[0].slice(0, 2) || "NA").toUpperCase();
+        return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
     }
+
 
     return `
     <!doctype html>
@@ -94,7 +105,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
         </div>
-        <img src="file:${previewImageSrc}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
+        <img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
         <p class="preview_quantity">${data.itemInfo.itemQuantity}x</p>
         </div>
         <!-- <p class="page_number">Page: ${data.itemInfo.itemNumber}</p> -->
@@ -115,7 +126,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=wo_f_bt_col_header>
         <small>Color Specifications</small>
         </div>
-        <div class=wo_f_bt_col_body>
+        <div class="wo_f_bt_col_body color_specs">
         <div class=wo_f_bt_col_body_img_cont>
         <img class=wo_f_bt_col_body_img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/full-color-print-2.png alt="Color Specs">
         <p class=id_po_text>Full Color Print</p>
@@ -126,38 +137,56 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=wo_f_bt_col_header>
         <small>Material Specifications</small>
         </div>
-        <div class=wo_f_bt_col_body>
-        ${data.itemInfo.itemMaterialSpecifications[0].children.map((cc: any) => {
-        if (cc.variableName === 'Machine') {
-            return null
-        }
-        return `
-                <div class=wo_f_bt_col_body_img_cont id="${cc.variableName}">
-                <img class=wo_f_bt_col_body_img src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc.name)}" alt="${cc.name}">
-                <p class=id_po_text>${cc.name}</p>
+        <div class="wo_f_bt_col_body" id="material_specs">
+       
+
+     ${(data?.itemInfo?.itemMaterialSpecifications?.[0]?.children ?? [])
+            .filter((cc: any) => cc?.variableName !== 'Machine')
+            .map((cc: any) => `
+                <div class="wo_f_bt_col_body_img_cont" id="${cc.variableName}">
+                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc.name)}" alt="${cc.name}">
+                <p class="id_po_text">${cc.name}</p>
                 </div>
-            `
-    })
-            .join("")}
-        
+            `)
+            .join('')}
+    
         </div>
         </div>
+        ${data.itemInfo.itemDescription ? `
         <div class=wo_f_bt_col>
         <div class=wo_f_bt_col_header>
         <small>Description</small>
         </div>
         <div class=wo_f_bt_col_body>
-        <p class=id_po_text>${stripHTMLDoc(data.itemInfo.itemDescription)}</p>
+        <p class=id_po_text description>${stripHTMLDoc(data.itemInfo.itemDescription)}</p>
         </div>
-        </div>
+        </div>`
+            :
+            ""}
         <div class=wo_f_bt_col>
         <div class=wo_f_bt_col_header>
         <small>Shipping</small>
         </div>
+        
         <div class="wo_f_bt_col_body delivery_info">
-            ${data.orderInfo.orderDeliveryInfo && data.orderInfo.orderDeliveryInfo.map((info: any) => (
-                `<p class=id_po_text>• ${info.name}</p>`
-            )).join('')}
+        ${Array.isArray(data?.orderInfo?.orderDeliveryInfo)
+            ? data.orderInfo.orderDeliveryInfo
+                .map((info: any) => {
+                    // Handle both string or object types safely
+                    const text = typeof info === "string" ? info : info?.name || "";
+
+                    // Split on actual newline characters
+                    if (text.includes("\n")) {
+                        return text
+                            .split(/\n+/) // <-- ✅ actual regex, not string
+                            .map((line: string) => `<p class="id_po_text">${line.trim()}</p>`)
+                            .join("");
+                    } else {
+                        return `<p class="id_po_text">• ${text.trim()}</p>`;
+                    }
+                })
+                .join("")
+            : ""}
         </div>
         </div>
         </div>
