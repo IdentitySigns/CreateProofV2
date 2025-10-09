@@ -445,7 +445,9 @@ body {
 }
 
 #material_specs {
-  flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: .75rem;
+    align-items: center;
 }
 
 #material_specs .wo_f_bt_col_body_img_cont {
