@@ -67,8 +67,8 @@ async function jobArrived(s, flowElement, job) {
         // Clean up temporary file
         fs.unlinkSync(tempFile.name);
         // Remove original after children have been created and dispatched
-        // await job.sendToNull(); // comment out for dev
-        await job.sendToData(Connection.Level.Error);
+        await job.sendToNull(); // for the file that came into the script
+        // await job.sendToData(Connection.Level.Error); // uncomment for DEV
     }
     catch (error) {
         await job.log(LogLevel.Error, "There was an error: " + error);

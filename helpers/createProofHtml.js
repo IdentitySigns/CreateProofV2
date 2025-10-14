@@ -219,11 +219,11 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         <div class=revision_icon_cont><img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/submit.png alt=""></div>
         </div>
         <div class=revision_table_data>
-        ${revisionData && revisionData.map((r) => (`<div class=revision_table_row>
+        ${revisionData && revisionData.revisionLog.map((r, i) => (`<div class=revision_table_row>
             <div class=revision_table_cell>
-            <small>${(0, helpers_js_1.formatISODateToMMDDYY)(r === null || r === void 0 ? void 0 : r.revisionDate)}</small>
+            <small>${(0, helpers_js_1.formatISODateToMMDDYY)(r === null || r === void 0 ? void 0 : r.date)}</small>
             </div>
-            <div class=revision_table_cell><small>${(r === null || r === void 0 ? void 0 : r.revisionNumber) || "NA"}</small></div>
+            <div class=revision_table_cell><small>${i + 1 || "NA"}</small></div>
             <div class=revision_table_cell><small>${returnShortName(r === null || r === void 0 ? void 0 : r.submitter) || "NA"}</small></div>
             </div>`)).join('')}
         </div>

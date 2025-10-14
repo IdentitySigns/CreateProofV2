@@ -223,15 +223,16 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=revision_icon_cont><img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/submit.png alt=""></div>
         </div>
         <div class=revision_table_data>
-        ${revisionData && revisionData.map((r: any) => (
+        ${revisionData && revisionData.revisionLog.map((r: any,i:number) => (
                 `<div class=revision_table_row>
             <div class=revision_table_cell>
-            <small>${formatISODateToMMDDYY(r?.revisionDate)}</small>
+            <small>${formatISODateToMMDDYY(r?.date)}</small>
             </div>
-            <div class=revision_table_cell><small>${r?.revisionNumber || "NA"}</small></div>
+            <div class=revision_table_cell><small>${i + 1 || "NA"}</small></div>
             <div class=revision_table_cell><small>${returnShortName(r?.submitter) || "NA"}</small></div>
             </div>`
             )).join('')
+            
         }
         </div>
         </div>
