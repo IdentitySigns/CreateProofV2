@@ -412,12 +412,12 @@ body {
   max-width: 250px;
 }
 .description {
-  font-size: smaller;
+  font-size: small;
   padding: 0;
 }
 .delivery_info > p.id_po_text {
   padding: 0;
-  font-size: smaller;
+  font-size: small;
 
   overflow: hidden;
   display: -webkit-box;
@@ -435,7 +435,7 @@ body {
 
 .wo_f_bt_col_body_img_cont > .id_po_text {
   max-width: 100px;
-  font-size: smaller;
+  font-size: small;
   padding-left: 0.5rem;
 }
 

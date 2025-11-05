@@ -91,7 +91,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=extension_line>
         <img class="dim_arrow one" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
-        <p class=dim_number>${data.itemInfo.itemWidth}</p>
+        <p class=dim_number>${data?.itemInfo?.itemWidth}</p>
         <div class=extension_line>
         <img class="dim_arrow two" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
@@ -100,25 +100,25 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=extension_line>
         <img class="dim_arrow three" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
-        <p class=dim_number>${data.itemInfo.itemHeight}</p>
+        <p class=dim_number>${data?.itemInfo?.itemHeight}</p>
         <div class=extension_line>
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
         </div>
-        <img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data.orderInfo.orderNumber}" class=artwork_preview id=proof_artwork_preview>
-        <p class="preview_quantity">${data.itemInfo.itemQuantity}x</p>
+        <img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data?.orderInfo?.orderNumber}" class=artwork_preview id=proof_artwork_preview>
+        <p class="preview_quantity">| QTY: x${data?.itemInfo?.itemQuantity}x | </p>
         </div>
-        <!-- <p class="page_number">Page: ${data.itemInfo.itemNumber}</p> -->
+        <!-- <p class="page_number">Page: ${data?.itemInfo?.itemNumber}</p> -->
         </div>
         <div class=id_wo_footer_section>
         <div class=wo_f_top_section>
         <div class=job_info_cont>
-        <p><span class=large>${data.orderInfo.orderNumber}</span></p>
-        <div class=item_spacer><small>ITEM</small><p>${data.itemInfo.itemNumber}</p></div>
-        <p><span class=med>${data.itemInfo.itemName} - ${data.itemInfo.itemQuantity}x</span></p>
+        <p><span class=large>${data?.orderInfo?.orderNumber}</span></p>
+        <div class=item_spacer><small>ITEM</small><p>${data?.itemInfo?.itemNumber}</p></div>
+        <p><span class=med>${data?.itemInfo?.itemName} | QTY: x${data?.itemInfo?.itemQuantity} | ${data?.itemInfo?.itemPrintedSides}</span></p>
         </div>
         <div class=job_info_ender>
-        <p class=upper>${data.orderInfo.orderStatus}</p>
+        <p class=upper>${data?.orderInfo?.orderStatus}</p>
         </div>
         </div>
         <div class=wo_f_bt_section>
@@ -143,22 +143,22 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
      ${(data?.itemInfo?.itemMaterialSpecifications?.[0]?.children ?? [])
             .filter((cc: any) => cc?.variableName !== 'Machine')
             .map((cc: any) => `
-                <div class="wo_f_bt_col_body_img_cont" id="${cc.variableName}">
-                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc.name)}" alt="${cc.name}">
-                <p class="id_po_text">${cc.name}</p>
+                <div class="wo_f_bt_col_body_img_cont" id="${cc?.variableName}">
+                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name}">
+                <p class="id_po_text">${cc?.name}</p>
                 </div>
             `)
             .join('')}
     
         </div>
         </div>
-        ${data.itemInfo.itemDescription ? `
+        ${data?.itemInfo?.itemDescription ? `
         <div class=wo_f_bt_col>
         <div class=wo_f_bt_col_header>
         <small>Description</small>
         </div>
         <div class=wo_f_bt_col_body>
-        <p class=id_po_text description>${stripHTMLDoc(data.itemInfo.itemDescription)}</p>
+        <p class=id_po_text description>${stripHTMLDoc(data?.itemInfo?.itemDescription)}</p>
         </div>
         </div>`
             :
@@ -170,7 +170,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         
         <div class="wo_f_bt_col_body delivery_info">
         ${Array.isArray(data?.orderInfo?.orderDeliveryInfo)
-            ? data.orderInfo.orderDeliveryInfo
+            ? data?.orderInfo?.orderDeliveryInfo
                 .map((info: any) => {
                     // Handle both string or object types safely
                     const text = typeof info === "string" ? info : info?.name || "";
@@ -203,14 +203,14 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class="sb_section id_wo_client_info_cont">
 
         <p class="id_po_text strong">Client</p>
-        <p class=id_po_text>${data.orderInfo.orderClientName || "NA"}</p>
+        <p class=id_po_text>${data?.orderInfo?.orderClientName || "NA"}</p>
         
         <div class=standard_divider></div>
         
         <p class="id_po_text strong">Contact</p>
-        <p class=id_po_text>${data.orderInfo.contactName || "NA"}</p>
-        ${data.orderInfo?.contactPhone ? `<p class=id_po_text>${data.orderInfo?.contactPhone}</p>` : ""}
-        ${data.orderInfo?.contactEmail ? `<p class=id_po_text>${data.orderInfo?.contactEmail}</p>` : ""}
+        <p class=id_po_text>${data?.orderInfo?.contactName || "NA"}</p>
+        ${data?.orderInfo?.contactPhone ? `<p class=id_po_text>${data?.orderInfo?.contactPhone}</p>` : ""}
+        ${data?.orderInfo?.contactEmail ? `<p class=id_po_text>${data?.orderInfo?.contactEmail}</p>` : ""}
 
         </div>
         <div class=standard_divider></div>
@@ -223,7 +223,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=revision_icon_cont><img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/submit.png alt=""></div>
         </div>
         <div class=revision_table_data>
-        ${revisionData && revisionData.revisionLog.map((r: any,i:number) => (
+        ${revisionData && revisionData?.revisionLog.map((r: any,i:number) => (
                 `<div class=revision_table_row>
             <div class=revision_table_cell>
             <small>${formatISODateToMMDDYY(r?.date)}</small>
@@ -245,13 +245,13 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=id_wo_divider></div>
         <div class=sb_section>
         <p class="id_po_text strong">Sales Person</p>
-        <p class=id_po_text>${data.orderInfo.orderAssignedTo}</p>
+        <p class=id_po_text>${data?.orderInfo?.orderAssignedTo}</p>
         <div class=standard_divider></div>
         <p class="id_po_text strong">Project Manager</p>
-        <p class=id_po_text>${data.orderInfo.orderAssignedProjectManager}</p>
+        <p class=id_po_text>${data?.orderInfo?.orderAssignedProjectManager}</p>
         <div class=standard_divider></div>
         <p class="id_po_text strong">Designer</p>
-        <p class=id_po_text>${data.itemInfo.itemDesigner}</p>
+        <p class=id_po_text>${data?.itemInfo?.itemDesigner}</p>
         </div>
         </div>
         </div>
