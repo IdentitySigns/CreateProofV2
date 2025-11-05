@@ -144,7 +144,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
             .filter((cc: any) => cc?.variableName !== 'Machine')
             .map((cc: any) => `
                 <div class="wo_f_bt_col_body_img_cont" id="${cc?.variableName}">
-                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name.replace(/"/g,'')}">
+                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name.replace(/"/g, '')}">
                 <p class="id_po_text">${cc?.name}</p>
                 </div>
             `)
@@ -176,21 +176,21 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
                 <div class="wo_f_bt_col_body delivery_info">
                 ${Array.isArray(data?.orderInfo?.orderDeliveryInfo)
                 ? data?.orderInfo?.orderDeliveryInfo
-                .map((info: any) => {
-                // Handle both string or object types safely
-                const text = typeof info === "string" ? info : info?.name || "";
+                    .map((info: any) => {
+                        // Handle both string or object types safely
+                        const text = typeof info === "string" ? info : info?.name || "";
 
-                // Split on actual newline characters
-                if (text.includes("\n")) {
-                return text
-                .split(/\n+/) // <-- ✅ actual regex, not string
-                .map((line: string) => `<p class="id_po_text">${line.trim()}</p>`)
-                .join("");
-                } else {
-                return `<p class="id_po_text">• ${text.trim()}</p>`;
-                }
-                })
-                .join("")
+                        // Split on actual newline characters
+                        if (text.includes("\n")) {
+                            return text
+                                .split(/\n+/) // <-- ✅ actual regex, not string
+                                .map((line: string) => `<p class="id_po_text">${line.trim()}</p>`)
+                                .join("");
+                        } else {
+                            return `<p class="id_po_text">• ${text.trim()}</p>`;
+                        }
+                    })
+                    .join("")
                 : ""}
                 </div>
                 </div>
@@ -216,8 +216,8 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         
         <p class="id_po_text strong">Contact</p>
         <p class=id_po_text>${data?.orderInfo?.contactName || "NA"}</p>
-        ${data?.orderInfo?.contactPhone ? `<p class=id_po_text>${data?.orderInfo?.contactPhone}</p>` : ""}
-        ${data?.orderInfo?.contactEmail ? `<p class=id_po_text>${data?.orderInfo?.contactEmail}</p>` : ""}
+        ${data?.orderInfo?.contactPhone || data?.orderInfo?.contactPhone !== "undefined" ? `<p class=id_po_text>${data?.orderInfo?.contactPhone}</p>` : ""}
+        ${data?.orderInfo?.contactEmail || data?.orderInfo?.contactEmail !== "undefined" ? `<p class=id_po_text>${data?.orderInfo?.contactEmail}</p>` : ""}
 
         </div>
         <div class=standard_divider></div>

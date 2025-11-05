@@ -48,7 +48,7 @@ const styles_js_1 = require("./styles.js");
 //     }
 // ]
 const createProofHtml = (data, revisionData, previewImageSrc) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
     function returnShortName(fullname) {
         if (!fullname)
             return "NA";
@@ -210,8 +210,8 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         
         <p class="id_po_text strong">Contact</p>
         <p class=id_po_text>${((_x = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _x === void 0 ? void 0 : _x.contactName) || "NA"}</p>
-        ${((_y = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _y === void 0 ? void 0 : _y.contactPhone) ? `<p class=id_po_text>${(_z = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _z === void 0 ? void 0 : _z.contactPhone}</p>` : ""}
-        ${((_0 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _0 === void 0 ? void 0 : _0.contactEmail) ? `<p class=id_po_text>${(_1 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _1 === void 0 ? void 0 : _1.contactEmail}</p>` : ""}
+        ${((_y = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _y === void 0 ? void 0 : _y.contactPhone) || ((_z = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _z === void 0 ? void 0 : _z.contactPhone) !== "undefined" ? `<p class=id_po_text>${(_0 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _0 === void 0 ? void 0 : _0.contactPhone}</p>` : ""}
+        ${((_1 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _1 === void 0 ? void 0 : _1.contactEmail) || ((_2 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _2 === void 0 ? void 0 : _2.contactEmail) !== "undefined" ? `<p class=id_po_text>${(_3 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _3 === void 0 ? void 0 : _3.contactEmail}</p>` : ""}
 
         </div>
         <div class=standard_divider></div>
@@ -242,13 +242,13 @@ const createProofHtml = (data, revisionData, previewImageSrc) => {
         <div class=id_wo_divider></div>
         <div class=sb_section>
         <p class="id_po_text strong">Sales Person</p>
-        <p class=id_po_text>${(_2 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _2 === void 0 ? void 0 : _2.orderAssignedTo}</p>
+        <p class=id_po_text>${(_4 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _4 === void 0 ? void 0 : _4.orderAssignedTo}</p>
         <div class=standard_divider></div>
         <p class="id_po_text strong">Project Manager</p>
-        <p class=id_po_text>${(_3 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _3 === void 0 ? void 0 : _3.orderAssignedProjectManager}</p>
+        <p class=id_po_text>${(_5 = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _5 === void 0 ? void 0 : _5.orderAssignedProjectManager}</p>
         <div class=standard_divider></div>
         <p class="id_po_text strong">Designer</p>
-        <p class=id_po_text>${(_4 = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _4 === void 0 ? void 0 : _4.itemDesigner}</p>
+        <p class=id_po_text>${(_6 = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _6 === void 0 ? void 0 : _6.itemDesigner}</p>
         </div>
         </div>
         </div>
