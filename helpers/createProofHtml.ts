@@ -106,7 +106,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         </div>
         </div>
         <img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data?.orderInfo?.orderNumber}" class=artwork_preview id=proof_artwork_preview>
-        <p class="preview_quantity">| QTY: x${data?.itemInfo?.itemQuantity}x | </p>
+        <p class="preview_quantity">${data?.itemInfo?.itemQuantity}x</p>
         </div>
         <!-- <p class="page_number">Page: ${data?.itemInfo?.itemNumber}</p> -->
         </div>
@@ -144,7 +144,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
             .filter((cc: any) => cc?.variableName !== 'Machine')
             .map((cc: any) => `
                 <div class="wo_f_bt_col_body_img_cont" id="${cc?.variableName}">
-                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name}">
+                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name.replace(/"/g,'')}">
                 <p class="id_po_text">${cc?.name}</p>
                 </div>
             `)
@@ -152,43 +152,50 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
     
         </div>
         </div>
+
         ${data?.itemInfo?.itemDescription ? `
-        <div class=wo_f_bt_col>
-        <div class=wo_f_bt_col_header>
-        <small>Description</small>
-        </div>
-        <div class=wo_f_bt_col_body>
-        <p class=id_po_text description>${stripHTMLDoc(data?.itemInfo?.itemDescription)}</p>
-        </div>
-        </div>`
+            <div class=wo_f_bt_col>
+                <div class=wo_f_bt_col_header>
+                    <small>Other Details</small>
+                </div>
+                <div class=wo_f_bt_col_body>
+                    <p class=id_po_text description>${stripHTMLDoc(data?.itemInfo?.itemDescription)}</p>
+                </div>
+            </div>`
             :
             ""}
-        <div class=wo_f_bt_col>
-        <div class=wo_f_bt_col_header>
-        <small>Shipping</small>
-        </div>
-        
-        <div class="wo_f_bt_col_body delivery_info">
-        ${Array.isArray(data?.orderInfo?.orderDeliveryInfo)
-            ? data?.orderInfo?.orderDeliveryInfo
-                .map((info: any) => {
-                    // Handle both string or object types safely
-                    const text = typeof info === "string" ? info : info?.name || "";
 
-                    // Split on actual newline characters
-                    if (text.includes("\n")) {
-                        return text
-                            .split(/\n+/) // <-- ✅ actual regex, not string
-                            .map((line: string) => `<p class="id_po_text">${line.trim()}</p>`)
-                            .join("");
-                    } else {
-                        return `<p class="id_po_text">• ${text.trim()}</p>`;
-                    }
+
+        ${data?.orderInfo?.orderDeliveryInfo ?
+            `
+                <div class=wo_f_bt_col>
+                <div class=wo_f_bt_col_header>
+                <small>Shipping</small>
+                </div>
+
+                <div class="wo_f_bt_col_body delivery_info">
+                ${Array.isArray(data?.orderInfo?.orderDeliveryInfo)
+                ? data?.orderInfo?.orderDeliveryInfo
+                .map((info: any) => {
+                // Handle both string or object types safely
+                const text = typeof info === "string" ? info : info?.name || "";
+
+                // Split on actual newline characters
+                if (text.includes("\n")) {
+                return text
+                .split(/\n+/) // <-- ✅ actual regex, not string
+                .map((line: string) => `<p class="id_po_text">${line.trim()}</p>`)
+                .join("");
+                } else {
+                return `<p class="id_po_text">• ${text.trim()}</p>`;
+                }
                 })
                 .join("")
+                : ""}
+                </div>
+                </div>
+            `
             : ""}
-        </div>
-        </div>
         </div>
         </div>
         </div>
@@ -223,7 +230,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=revision_icon_cont><img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/submit.png alt=""></div>
         </div>
         <div class=revision_table_data>
-        ${revisionData && revisionData?.revisionLog.map((r: any,i:number) => (
+        ${revisionData && revisionData?.revisionLog.map((r: any, i: number) => (
                 `<div class=revision_table_row>
             <div class=revision_table_cell>
             <small>${formatISODateToMMDDYY(r?.date)}</small>
@@ -232,7 +239,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
             <div class=revision_table_cell><small>${returnShortName(r?.submitter) || "NA"}</small></div>
             </div>`
             )).join('')
-            
+
         }
         </div>
         </div>
