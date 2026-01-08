@@ -115,10 +115,10 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=job_info_cont>
         <p><span class=large>${data?.orderInfo?.orderNumber}</span></p>
         <div class=item_spacer><small>ITEM</small><p>${data?.itemInfo?.itemNumber}</p></div>
-        <p><span class=med>${data?.itemInfo?.itemName} | QTY: x${data?.itemInfo?.itemQuantity} | ${data?.itemInfo?.itemPrintedSides}</span></p>
+        <p><span class=med>${data?.itemInfo?.itemName} | QTY: x${data?.itemInfo?.itemQuantity} | ${data?.itemInfo?.itemPrintedSides || 'Single Sided'}</span></p>
         </div>
         <div class=job_info_ender>
-        <p class=upper>${data?.orderInfo?.orderStatus}</p>
+        <p class=upper>${data?.orderInfo?.orderStatus || 'Order Placed'}</p>
         </div>
         </div>
         <div class=wo_f_bt_section>
@@ -216,8 +216,8 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         
         <p class="id_po_text strong">Contact</p>
         <p class=id_po_text>${data?.orderInfo?.contactName || "NA"}</p>
-        ${data?.orderInfo?.contactPhone || data?.orderInfo?.contactPhone !== "undefined" ? `<p class=id_po_text>${data?.orderInfo?.contactPhone}</p>` : ""}
-        ${data?.orderInfo?.contactEmail || data?.orderInfo?.contactEmail !== "undefined" ? `<p class=id_po_text>${data?.orderInfo?.contactEmail}</p>` : ""}
+        ${data?.orderInfo?.contactPhone && data?.orderInfo?.contactPhone !== "undefined" ? `<p class=id_po_text>${data?.orderInfo?.contactPhone}</p>` : ""}
+        ${data?.orderInfo?.contactEmail && data?.orderInfo?.contactEmail !== "undefined" ? `<p class=id_po_text>${data?.orderInfo?.contactEmail}</p>` : ""}
 
         </div>
         <div class=standard_divider></div>
@@ -229,7 +229,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=revision_icon_cont><img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/revision.png alt=""></div>
         <div class=revision_icon_cont><img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/submit.png alt=""></div>
         </div>
-        <div class=revision_table_data>
+        <div id=revision_table_data class=revision_table_data>
         ${revisionData && revisionData?.revisionLog.map((r: any, i: number) => (
                 `<div class=revision_table_row>
             <div class=revision_table_cell>
@@ -249,20 +249,40 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <p class=id_po_text><small>All designs represented are the sole property of Identity Signs and may not be reproduced in part or whole without written permission from Identity Signs.</small>
         </p>
         </div>
+
         <div class=id_wo_divider></div>
+
         <div class=sb_section>
-        <p class="id_po_text strong">Sales Person</p>
-        <p class=id_po_text>${data?.orderInfo?.orderAssignedTo}</p>
+        ${data?.orderInfo?.orderAssignedTo && `
+            <p class="id_po_text strong">Sales Person</p>
+            <p class=id_po_text>${data?.orderInfo?.orderAssignedTo}</p>`
+        }
+
         <div class=standard_divider></div>
-        <p class="id_po_text strong">Project Manager</p>
-        <p class=id_po_text>${data?.orderInfo?.orderAssignedProjectManager}</p>
+        ${data?.orderInfo?.orderAssignedProjectManager && `
+            <p class="id_po_text strong">Project Manager</p>
+            <p class=id_po_text>${data?.orderInfo?.orderAssignedProjectManager}</p>`
+        }
+
         <div class=standard_divider></div>
-        <p class="id_po_text strong">Designer</p>
-        <p class=id_po_text>${data?.itemInfo?.itemDesigner}</p>
+        ${data?.itemInfo?.itemDesigner &&
+        `
+            <p class="id_po_text strong">Designer</p>
+            <p class=id_po_text>${data?.itemInfo?.itemDesigner}</p>
+        `
+        }
+
         </div>
         </div>
         </div>
         </div>
+        <script>
+            window.addEventListener("load", () => {
+                const el = document.querySelector("#revision_table_data"); // change selector
+                if (!el) return;
+                el.scrollTop = el.scrollHeight;
+            });
+        </script>
     </body>
     </html>
 `;

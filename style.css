@@ -467,11 +467,6 @@ body {
   padding: 0.5rem 0;
 }
 
-.revision_container > table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
 .revision_table_header {
   height: 30px;
   display: flex;
@@ -487,6 +482,14 @@ body {
   flex-direction: column;
   align-items: left;
   justify-content: left;
+}
+
+.revision_table_data {
+  max-height: 330px;
+  overflow-y: auto;
+}
+.revision_table_data::-webkit-scrollbar {
+  display: none;
 }
 
 .revision_icon_cont > img {
