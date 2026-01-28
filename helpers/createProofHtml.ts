@@ -49,7 +49,7 @@ import { returnStyles } from './styles.js'
 
 
 
-export const createProofHtml = (data: any, revisionData: any, previewImageSrc: string) => {
+export const createProofHtml = (data: any, revisionData: any, previewImageSrc: any, isDoubleSided: boolean) => {
 
     function returnShortName(fullname?: string) {
         if (!fullname) return "NA";
@@ -64,6 +64,22 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         const parts = name.split(/\s+/).filter(Boolean);
         if (parts.length === 1) return (parts[0].slice(0, 2) || "NA").toUpperCase();
         return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    }
+
+    const determinePreviewOrientation = (width: any, height: any) => {
+        let w = parseInt(width)
+        let h = parseInt(height)
+        // square and vertical should be portrait
+        // this function helps return class names to help style the preview container when something is double sided
+        if (w > h) {
+            // landscape
+            // column to be stacked one on top of the other
+            return "flex_col"
+        } else {
+            // portrait
+            // row to be stacked side by side
+            return 'flex_row'
+        }
     }
 
 
@@ -87,7 +103,8 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <div class=id_wo_artwork_side>
         <div class=id_wo_artwork_section>
         <div class=artwork_preview_cont>
-        <div class="dimension_cont top">
+       ${!isDoubleSided ? `
+         <div class="dimension_cont top">
         <div class=extension_line>
         <img class="dim_arrow one" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
@@ -105,7 +122,40 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
         </div>
-        <img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data?.orderInfo?.orderNumber}" class=artwork_preview id=proof_artwork_preview>
+        `:""}
+        ${isDoubleSided ?
+            `<div class="double_sided_preview_cont ${determinePreviewOrientation(data?.itemInfo?.itemWidth,data?.itemInfo?.itemHeight)}">
+                ${previewImageSrc.map((image: string, item: number) => (
+                `
+                <div class="img_wrap">
+                    ${item === 0 ? `
+                        <div class="dimension_cont top">
+                            <div class=extension_line> 
+                                <img class="dim_arrow one" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
+                            </div>
+                            <p class=dim_number>48in</p>
+                            <div class=extension_line> 
+                                <img class="dim_arrow two" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
+                            </div>
+                        </div>
+                        <div class="dimension_cont left">
+                            <div class=extension_line> 
+                                <img class="dim_arrow three" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
+                            </div>
+                            <p class=dim_number>18in</p>
+                            <div class=extension_line> 
+                                <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
+                            </div>
+                        </div>
+                    `:""}
+                    <p class="side_tag">Side ${item === 0 ? 'A' : 'B'}</p>
+                    <img src="file:${image}" alt="Preview of ${data?.orderInfo?.orderNumber} item ${item}" class="art_preview">
+                 </div>
+                `
+            )).join('')}
+            </div>`
+            :
+            `<img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data?.orderInfo?.orderNumber}" class=artwork_preview id=proof_artwork_preview>`}
         <p class="preview_quantity">${data?.itemInfo?.itemQuantity}x</p>
         </div>
         <!-- <p class="page_number">Page: ${data?.itemInfo?.itemNumber}</p> -->
@@ -278,7 +328,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: s
         </div>
         <script>
             window.addEventListener("load", () => {
-                const el = document.querySelector("#revision_table_data"); // change selector
+                const el = document.querySelector("#revision_table_data");
                 if (!el) return;
                 el.scrollTop = el.scrollHeight;
             });

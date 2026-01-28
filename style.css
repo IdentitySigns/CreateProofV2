@@ -271,9 +271,16 @@ body {
   position: relative;
 }
 
+.double_sided_preview_cont {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .artwork_preview_cont {
   width: max-content;
-  max-width: 80%;
+  height: 660px;
+  width: 1000px;
   position: relative;
   margin: auto;
 }
@@ -287,6 +294,53 @@ body {
   max-width: 1000px;
   display: block;
   margin: auto;
+}
+
+.double_sided_preview_cont {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.double_sided_preview_cont.flex_col {
+  flex-direction: column;
+  align-items: center;
+}
+
+.double_sided_preview_cont.flex_row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.img_wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  height: max-content;
+  max-width: max-content;
+  position: relative;
+}
+
+.img_wrap .art_preview {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.side_tag {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%);
+  left: 105%;
+  white-space: nowrap;
+}
+
+.double_sided_preview_cont.flex_col > .img_wrap:last-child {
+  margin-top: 1rem;
+}
+
+.double_sided_preview_cont.flex_row > .img_wrap:last-child {
+  margin-left: 1rem;
 }
 
 .id_wo_footer_section {

@@ -6,10 +6,12 @@ import { createProofHtml } from "./helpers/createProofHtml";
 async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
   try {
     const jobName = job.getName(false);
+    let previewImageSrc: any;
 
-    let previewImageSrc: string = (await flowElement.getPropertyStringValue(
+    let flowElementImagePreview = (await flowElement.getPropertyStringValue(
       "previewImageSrc"
-    )) as string;
+    )) as any;
+
     // get the jobs dataset path
     const standardizedDataPath: string = await job.getDataset("standardizedData", AccessLevel.ReadOnly)
     const revisionDataPath: string = await job.getDataset("revisionData", AccessLevel.ReadOnly)
@@ -17,6 +19,8 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     if (!previewImageSrc) {
       await job.log(LogLevel.Error, "** There was no Preview Image Src.")
     }
+
+    await job.log(LogLevel.Info, `[Create Work Order]: here is the preview img: ${previewImageSrc}`)
 
     if (!standardizedDataPath) {
       await job.log(LogLevel.Error, "** Could not find the path for the standardized data")
@@ -38,8 +42,16 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
       await job.log(LogLevel.Error, "** No Revision data could be found")
     }
 
+    let isJobDoubleSided = standardizedData?.itemInfo?.itemPrintedSides.toLowerCase().includes('double')
+    // check is item is double sided
+    if (isJobDoubleSided) {
+      previewImageSrc = standardizedData?.itemInfo?.itemPreviewUrl // array 
+    } else {
+      previewImageSrc = flowElementImagePreview // string 
+    }
+
     // Build HTML
-    const builtHtml = createProofHtml(standardizedData, revisionData, previewImageSrc)
+    const builtHtml = createProofHtml(standardizedData, revisionData, previewImageSrc, isJobDoubleSided)
 
     // log proof HTML for dev
     await job.log(LogLevel.Info, `Here is the Proof HTML -> ${builtHtml}`)

@@ -28,15 +28,18 @@ const tmp = __importStar(require("tmp"));
 const createProofHtml_1 = require("./helpers/createProofHtml");
 // import { testData } from "./testData/testData";
 async function jobArrived(s, flowElement, job) {
+    var _a, _b;
     try {
         const jobName = job.getName(false);
-        let previewImageSrc = (await flowElement.getPropertyStringValue("previewImageSrc"));
+        let previewImageSrc;
+        let flowElementImagePreview = (await flowElement.getPropertyStringValue("previewImageSrc"));
         // get the jobs dataset path
         const standardizedDataPath = await job.getDataset("standardizedData", AccessLevel.ReadOnly);
         const revisionDataPath = await job.getDataset("revisionData", AccessLevel.ReadOnly);
         if (!previewImageSrc) {
             await job.log(LogLevel.Error, "** There was no Preview Image Src.");
         }
+        await job.log(LogLevel.Info, `[Create Work Order]: here is the preview img: ${previewImageSrc}`);
         if (!standardizedDataPath) {
             await job.log(LogLevel.Error, "** Could not find the path for the standardized data");
         }
@@ -52,8 +55,16 @@ async function jobArrived(s, flowElement, job) {
         if (!revisionData) {
             await job.log(LogLevel.Error, "** No Revision data could be found");
         }
+        let isJobDoubleSided = (_a = standardizedData === null || standardizedData === void 0 ? void 0 : standardizedData.itemInfo) === null || _a === void 0 ? void 0 : _a.itemPrintedSides.toLowerCase().includes('double');
+        // check is item is double sided
+        if (isJobDoubleSided) {
+            previewImageSrc = (_b = standardizedData === null || standardizedData === void 0 ? void 0 : standardizedData.itemInfo) === null || _b === void 0 ? void 0 : _b.itemPreviewUrl; // array 
+        }
+        else {
+            previewImageSrc = flowElementImagePreview; // string 
+        }
         // Build HTML
-        const builtHtml = (0, createProofHtml_1.createProofHtml)(standardizedData, revisionData, previewImageSrc);
+        const builtHtml = (0, createProofHtml_1.createProofHtml)(standardizedData, revisionData, previewImageSrc, isJobDoubleSided);
         // log proof HTML for dev
         await job.log(LogLevel.Info, `Here is the Proof HTML -> ${builtHtml}`);
         // Create a temporary file to store the HTML
