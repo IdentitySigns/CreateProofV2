@@ -278,6 +278,15 @@ body {
 }
 
 .artwork_preview_cont {
+  height: max-content;
+  width: max-content;
+  max-width: 1000px;
+  max-height: 660px;
+  position: relative;
+  margin: auto;
+}
+
+.ds_artwork_cont {
   width: max-content;
   height: 660px;
   width: 1000px;

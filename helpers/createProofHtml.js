@@ -98,7 +98,7 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
         <div class=id_wo_inner>
         <div class=id_wo_artwork_side>
         <div class=id_wo_artwork_section>
-        <div class=artwork_preview_cont>
+        <div class=${!isDoubleSided ? "artwork_preview_cont" : "ds_artwork_cont"}>
        ${!isDoubleSided ? `
          <div class="dimension_cont top">
         <div class=extension_line>
