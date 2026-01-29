@@ -189,17 +189,14 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
         </div>
         <div class="wo_f_bt_col_body" id="material_specs">
        
-
+        <ul class="material_specs_list">
      ${(data?.itemInfo?.itemMaterialSpecifications?.[0]?.children ?? [])
             .filter((cc: any) => cc?.variableName !== 'Machine')
             .map((cc: any) => `
-                <div class="wo_f_bt_col_body_img_cont" id="${cc?.variableName}">
-                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name.replace(/"/g, '')}">
-                <p class="id_po_text">${cc?.name}</p>
-                </div>
+                <li class="" id="${cc?.variableName}">${cc?.name}</li>
             `)
             .join('')}
-    
+        </ul>
         </div>
         </div>
 
@@ -337,3 +334,12 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
     </html>
 `;
 };
+
+
+/*
+-- old style of material call out
+    <div class="wo_f_bt_col_body_img_cont" id="${cc?.variableName}">
+        <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name.replace(/"/g, '')}">
+        <p class="id_po_text">${cc?.name}</p>
+    </div>
+*/

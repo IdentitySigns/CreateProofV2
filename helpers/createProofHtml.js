@@ -186,17 +186,14 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
         </div>
         <div class="wo_f_bt_col_body" id="material_specs">
        
-
+        <ul class="material_specs_list">
      ${((_s = (_r = (_q = (_p = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _p === void 0 ? void 0 : _p.itemMaterialSpecifications) === null || _q === void 0 ? void 0 : _q[0]) === null || _r === void 0 ? void 0 : _r.children) !== null && _s !== void 0 ? _s : [])
         .filter((cc) => (cc === null || cc === void 0 ? void 0 : cc.variableName) !== 'Machine')
         .map((cc) => `
-                <div class="wo_f_bt_col_body_img_cont" id="${cc === null || cc === void 0 ? void 0 : cc.variableName}">
-                <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${(0, helpers_js_1.findAssetImg)(cc === null || cc === void 0 ? void 0 : cc.name)}" alt="${cc === null || cc === void 0 ? void 0 : cc.name.replace(/"/g, '')}">
-                <p class="id_po_text">${cc === null || cc === void 0 ? void 0 : cc.name}</p>
-                </div>
+                <li class="" id="${cc === null || cc === void 0 ? void 0 : cc.variableName}">${cc === null || cc === void 0 ? void 0 : cc.name}</li>
             `)
         .join('')}
-    
+        </ul>
         </div>
         </div>
 
@@ -326,4 +323,11 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
 `;
 };
 exports.createProofHtml = createProofHtml;
+/*
+-- old style of material call out
+    <div class="wo_f_bt_col_body_img_cont" id="${cc?.variableName}">
+        <img class="wo_f_bt_col_body_img" src="https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/${findAssetImg(cc?.name)}" alt="${cc?.name.replace(/"/g, '')}">
+        <p class="id_po_text">${cc?.name}</p>
+    </div>
+*/ 
 //# sourceMappingURL=createProofHtml.js.map

@@ -303,6 +303,8 @@ body {
   max-width: 1000px;
   display: block;
   margin: auto;
+  -webkit-filter: drop-shadow(0px 0px 5px #00000016);
+  filter: drop-shadow(0px 0px 5px #00000016);
 }
 
 .double_sided_preview_cont {
@@ -516,6 +518,15 @@ body {
 }
 #material_specs .wo_f_bt_col_body_img_cont:first-of-type {
   padding: 0;
+}
+
+.material_specs_list {
+  list-style: disc;
+  list-style-position: inside;
+}
+
+.material_specs_list > li {
+  padding-bottom: 2px;
 }
 
 .standard_divider {
