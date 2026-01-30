@@ -178,6 +178,13 @@ hr {
   --id-main-sm-border-radius: 4px;
 }
 
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
 html {
   font-size: 14px;
 }
@@ -305,6 +312,13 @@ body {
   margin: auto;
   -webkit-filter: drop-shadow(0px 0px 5px #00000016);
   filter: drop-shadow(0px 0px 5px #00000016);
+}
+
+@media print {
+  .artwork_preview {
+    -webkit-filter: drop-shadow(0px 0px 5px #00000016);
+    filter: drop-shadow(0px 0px 5px #00000016);
+  }
 }
 
 .double_sided_preview_cont {
