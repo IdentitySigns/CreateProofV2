@@ -122,7 +122,7 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
         ${isDoubleSided ?
         `<div class="double_sided_preview_cont ${determinePreviewOrientation((_c = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _c === void 0 ? void 0 : _c.itemWidth, (_d = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _d === void 0 ? void 0 : _d.itemHeight)}">
                 ${previewImageSrc.map((image, item) => {
-            var _a;
+            var _a, _b, _c;
             return (`
                 <div class="img_wrap">
                     ${item === 0 ? `
@@ -130,7 +130,7 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
                             <div class=extension_line> 
                                 <img class="dim_arrow one" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
                             </div>
-                            <p class=dim_number>48in</p>
+                            <p class=dim_number>${(_a = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _a === void 0 ? void 0 : _a.itemWidth}</p>
                             <div class=extension_line> 
                                 <img class="dim_arrow two" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
                             </div>
@@ -139,14 +139,14 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
                             <div class=extension_line> 
                                 <img class="dim_arrow three" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
                             </div>
-                            <p class=dim_number>18in</p>
+                            <p class=dim_number>${(_b = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _b === void 0 ? void 0 : _b.itemHeight}</p>
                             <div class=extension_line> 
                                 <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
                             </div>
                         </div>
                     ` : ""}
                     <p class="side_tag">Side ${item === 0 ? 'A' : 'B'}</p>
-                    <img src="file:${image}" alt="Preview of ${(_a = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _a === void 0 ? void 0 : _a.orderNumber} item ${item}" class="art_preview">
+                    <img src="file:${image}" alt="Preview of ${(_c = data === null || data === void 0 ? void 0 : data.orderInfo) === null || _c === void 0 ? void 0 : _c.orderNumber} item ${item}" class="art_preview">
                  </div>
                 `);
         }).join('')}

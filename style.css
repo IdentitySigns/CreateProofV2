@@ -326,6 +326,9 @@ body {
   height: 100%;
   width: 100%;
 }
+.double_sided_preview_cont img {
+  max-width: 380px;
+}
 
 .double_sided_preview_cont.flex_col {
   flex-direction: column;
@@ -335,6 +338,7 @@ body {
 .double_sided_preview_cont.flex_row {
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 }
 
 .img_wrap {
@@ -343,6 +347,7 @@ body {
   height: max-content;
   max-width: max-content;
   position: relative;
+  border: 1px dashed red;
 }
 
 .img_wrap .art_preview {
@@ -366,6 +371,17 @@ body {
 
 .double_sided_preview_cont.flex_row > .img_wrap:last-child {
   margin-left: 1rem;
+}
+
+.double_sided_preview_cont.flex_row .img_wrap {
+  max-width: 380px;
+}
+
+.double_sided_preview_cont.flex_row .side_tag {
+  top: unset;
+  bottom: -40px;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 .id_wo_footer_section {
