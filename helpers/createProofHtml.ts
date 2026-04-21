@@ -82,6 +82,8 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
         }
     }
 
+    let workOrderNumber = data?.orderInfo?.purchaseOrderNumber ? data?.orderInfo?.purchaseOrderNumber : data?.orderInfo?.orderNumber
+
 
     return `
     <!doctype html>
@@ -102,7 +104,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
         <div class=id_wo_inner>
         <div class=id_wo_artwork_side>
         <div class=id_wo_artwork_section>
-        <div class=${!isDoubleSided ? "artwork_preview_cont":"ds_artwork_cont"}>
+        <div class=${!isDoubleSided ? "artwork_preview_cont" : "ds_artwork_cont"}>
        ${!isDoubleSided ? `
          <div class="dimension_cont top">
         <div class=extension_line>
@@ -122,9 +124,9 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
         <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
         </div>
         </div>
-        `:""}
+        `: ""}
         ${isDoubleSided ?
-            `<div class="double_sided_preview_cont ${determinePreviewOrientation(data?.itemInfo?.itemWidth,data?.itemInfo?.itemHeight)}">
+            `<div class="double_sided_preview_cont ${determinePreviewOrientation(data?.itemInfo?.itemWidth, data?.itemInfo?.itemHeight)}">
                 ${previewImageSrc.map((image: string, item: number) => (
                 `
                 <div class="img_wrap">
@@ -147,28 +149,28 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
                                 <img class="dim_arrow four" alt=arrow src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/.renditions/wysiwyg/IdentitySigns/WorkOrderAssets/arrow.png>
                             </div>
                         </div>
-                    `:""}
+                    `: ""}
                     <p class="side_tag">Side ${item === 0 ? 'A' : 'B'}</p>
-                    <img src="file:${image}" alt="Preview of ${data?.orderInfo?.orderNumber} item ${item}" class="art_preview">
+                    <img src="file:C:/Automation/Thumbnails/${image}" alt="Preview of ${data?.orderInfo?.orderNumber} item ${item}" class="art_preview">
                  </div>
                 `
             )).join('')}
             </div>`
             :
-            `<img src="${previewImageSrc.includes('datacenter') ? `https://${previewImageSrc}` : `file:${previewImageSrc}`}" alt="Preview of ${data?.orderInfo?.orderNumber}" class=artwork_preview id=proof_artwork_preview>`}
+            `<img src="${`file:C:/Automation/Thumbnails/${previewImageSrc[0]}`}" alt="Preview of ${workOrderNumber}" class=artwork_preview id=proof_artwork_preview>`}
         <p class="preview_quantity">${data?.itemInfo?.itemQuantity}x</p>
         </div>
-        <!-- <p class="page_number">Page: ${data?.itemInfo?.itemNumber}</p> -->
+        <!-- <p class="page_number">Page: ${data?.itemInfo?.itemLineItemNumber}</p> -->
         </div>
         <div class=id_wo_footer_section>
         <div class=wo_f_top_section>
         <div class=job_info_cont>
-        <p><span class=large>${data?.orderInfo?.orderNumber}</span></p>
-        <div class=item_spacer><small>ITEM</small><p>${data?.itemInfo?.itemNumber}</p></div>
+        <p><span class=large>${workOrderNumber}</span></p>
+        <div class=item_spacer><small>ITEM</small><p>${data?.itemInfo?.itemLineItemNumber}</p></div>
         <p><span class=med>${data?.itemInfo?.itemName} | QTY: x${data?.itemInfo?.itemQuantity} | ${data?.itemInfo?.itemPrintedSides || 'Single Sided'}</span></p>
         </div>
         <div class=job_info_ender>
-        <p class=upper>${data?.orderInfo?.orderStatus || 'Order Placed'}</p>
+        <p class=upper>${data?.orderInfo?.orderStatus || 'WORK ORDER'}</p>
         </div>
         </div>
         <div class=wo_f_bt_section>
@@ -221,7 +223,12 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
                 </div>
 
                 <div class="wo_f_bt_col_body delivery_info">
-                ${Array.isArray(data?.orderInfo?.orderDeliveryInfo)
+                ${data?.orderInfo?.orderDeliveryMethod ? `
+                    <p class="id_po_text">• ${data.orderInfo.orderDeliveryMethod.trim()}</p>
+                    <p class="id_po_text">See Cyrious</p>
+                ` :""}
+
+                ${!data?.orderInfo?.orderDeliveryMethod && Array.isArray(data?.orderInfo?.orderDeliveryInfo)
                 ? data?.orderInfo?.orderDeliveryInfo
                     .map((info: any) => {
                         // Handle both string or object types safely

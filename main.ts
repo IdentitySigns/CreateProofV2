@@ -1,60 +1,56 @@
+// @ts-ignore-next-line: no types available
 import * as fs from "fs";
 import * as tmp from "tmp";
 import { createProofHtml } from "./helpers/createProofHtml";
-// import { testData } from "./testData/testData";
 
 async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
+  const logger = async (log: string, isError: boolean = false) => {
+    if (isError) {
+      await job.log(LogLevel.Error, `[CreateProofV2] - ${log}`)
+    } else {
+      await job.log(LogLevel.Info, `[CreateProofV2] - ${log}`)
+    }
+  }
+
+
   try {
     const jobName = job.getName(false);
-    let previewImageSrc: any;
-
-    let flowElementImagePreview = (await flowElement.getPropertyStringValue(
-      "previewImageSrc"
-    )) as any;
-
     // get the jobs dataset path
     const standardizedDataPath: string = await job.getDataset("standardizedData", AccessLevel.ReadOnly)
+    const orderDetailsDataPath: string = await job.getDataset("orderDetails", AccessLevel.ReadOnly)
     const revisionDataPath: string = await job.getDataset("revisionData", AccessLevel.ReadOnly)
 
-    if (!previewImageSrc) {
-      await job.log(LogLevel.Error, "** There was no Preview Image Src.")
-    }
-
-    await job.log(LogLevel.Info, `[Create Work Order]: here is the preview img: ${previewImageSrc}`)
 
     if (!standardizedDataPath) {
-      await job.log(LogLevel.Error, "** Could not find the path for the standardized data")
+      await logger("** Could not find the path for the standardized data", true)
+    }
+    if (!orderDetailsDataPath) {
+      await logger("** Could not find the path for the order details data", true)
     }
 
     // Read the file synchronously
     const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
-    await job.log(LogLevel.Info, `Dataset Path: ${standardizedDataPath}`)
+    const orderDetailsJsonData = fs.readFileSync(orderDetailsDataPath, 'utf-8');
     const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
-
     const standardizedData = JSON.parse(jsonData);
     const revisionData = JSON.parse(revisionJsonData);
 
     if (!standardizedData) {
-      await job.log(LogLevel.Error, "** No Standardized data could be found")
+      await logger("** No Standardized data could be found", true)
     }
 
     if (!revisionData) {
-      await job.log(LogLevel.Error, "** No Revision data could be found")
+      await logger("** No Revision data could be found", true)
     }
 
     let isJobDoubleSided = standardizedData?.itemInfo?.itemPrintedSides.toLowerCase().includes('double')
-    // check is item is double sided
-    if (isJobDoubleSided) {
-      previewImageSrc = standardizedData?.itemInfo?.itemPreviewUrl // array 
-    } else {
-      previewImageSrc = flowElementImagePreview // string 
-    }
-
+    let previewImageSrc = standardizedData?.itemInfo?.ItemPreviewFile // array
+    await logger(`[Create Work Order]: here is the preview img: ${previewImageSrc}`)
     // Build HTML
     const builtHtml = createProofHtml(standardizedData, revisionData, previewImageSrc, isJobDoubleSided)
 
     // log proof HTML for dev
-    await job.log(LogLevel.Info, `Here is the Proof HTML -> ${builtHtml}`)
+    await logger(`Here is the Proof HTML -> ${builtHtml}`)
 
     // Create a temporary file to store the HTML
     const tempFile = tmp.fileSync({ postfix: ".html" });
@@ -77,7 +73,7 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     await job.sendToNull(); // for the file that came into the script
     // await job.sendToData(Connection.Level.Error); // uncomment for DEV
   } catch (error) {
-    await job.log(LogLevel.Error, "There was an error: " + error);
+    await logger("There was an error: " + error, true);
     await job.sendToData(Connection.Level.Error);
   }
 }
