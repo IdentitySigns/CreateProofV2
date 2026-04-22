@@ -34,6 +34,7 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
     const standardizedData = JSON.parse(jsonData);
     const revisionData = JSON.parse(revisionJsonData);
+    const orderData = JSON.parse(orderDetailsJsonData);
 
     if (!standardizedData) {
       await logger("** No Standardized data could be found", true)
@@ -46,8 +47,9 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     let isJobDoubleSided = standardizedData?.itemInfo?.itemPrintedSides.toLowerCase().includes('double')
     let previewImageSrc = standardizedData?.itemInfo?.ItemPreviewFile // array
     await logger(`[Create Work Order]: here is the preview img: ${previewImageSrc}`)
+    await logger(`[Create Work Order]: Order Detail Json: ${JSON.stringify(orderDetailsJsonData)}`)
     // Build HTML
-    const builtHtml = createProofHtml(standardizedData, revisionData, previewImageSrc, isJobDoubleSided)
+    const builtHtml = createProofHtml(standardizedData, revisionData, orderData, previewImageSrc, isJobDoubleSided)
 
     // log proof HTML for dev
     await logger(`Here is the Proof HTML -> ${builtHtml}`)

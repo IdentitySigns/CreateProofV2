@@ -49,7 +49,7 @@ import { returnStyles } from './styles.js'
 
 
 
-export const createProofHtml = (data: any, revisionData: any, previewImageSrc: any, isDoubleSided: boolean) => {
+export const createProofHtml = (data: any, revisionData: any, orderData: any, previewImageSrc: any, isDoubleSided: boolean) => {
 
     function returnShortName(fullname?: string) {
         if (!fullname) return "NA";
@@ -226,7 +226,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
                 ${data?.orderInfo?.orderDeliveryMethod ? `
                     <p class="id_po_text">• ${data.orderInfo.orderDeliveryMethod.trim()}</p>
                     <p class="id_po_text">See Cyrious</p>
-                ` :""}
+                ` : ""}
 
                 ${!data?.orderInfo?.orderDeliveryMethod && Array.isArray(data?.orderInfo?.orderDeliveryInfo)
                 ? data?.orderInfo?.orderDeliveryInfo
@@ -254,6 +254,7 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
         </div>
         </div>
         <div class=id_wo_sidebar>
+        <div class="sidebar_upper_content">
         <div class=id_wo_sb_header>
         <img class=id_wo_logo alt=Logo src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/id-stacked-logo-white-id.png>
         <p class=id_po_text>Salt Lake, UT | Seattle, WA</p>
@@ -326,6 +327,12 @@ export const createProofHtml = (data: any, revisionData: any, previewImageSrc: a
         `
         }
 
+        </div>
+        </div>
+        </div>
+        <div class="sidebar_footer sb_section">
+        <div class="id_po_text"><small>Page:</small> <span class="page_number">${orderData?.lineItemNumber || 1}</span> <small>of</small> <span
+        class="page_number">${orderData?.numberToGroup || 1}</span>
         </div>
         </div>
         </div>

@@ -47,7 +47,7 @@ const styles_js_1 = require("./styles.js");
 //         "submitter": "tom@idsignco.com"
 //     }
 // ]
-const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => {
+const createProofHtml = (data, revisionData, orderData, previewImageSrc, isDoubleSided) => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14;
     function returnShortName(fullname) {
         if (!fullname)
@@ -248,6 +248,7 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
         </div>
         </div>
         <div class=id_wo_sidebar>
+        <div class="sidebar_upper_content">
         <div class=id_wo_sb_header>
         <img class=id_wo_logo alt=Logo src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/id-stacked-logo-white-id.png>
         <p class=id_po_text>Salt Lake, UT | Seattle, WA</p>
@@ -313,6 +314,12 @@ const createProofHtml = (data, revisionData, previewImageSrc, isDoubleSided) => 
             <p class=id_po_text>${(_14 = data === null || data === void 0 ? void 0 : data.itemInfo) === null || _14 === void 0 ? void 0 : _14.itemDesigner}</p>
         `}
 
+        </div>
+        </div>
+        </div>
+        <div class="sidebar_footer sb_section">
+        <div class="id_po_text"><small>Page:</small> <span class="page_number">${(orderData === null || orderData === void 0 ? void 0 : orderData.lineItemNumber) || 1}</span> <small>of</small> <span
+        class="page_number">${(orderData === null || orderData === void 0 ? void 0 : orderData.numberToGroup) || 1}</span>
         </div>
         </div>
         </div>

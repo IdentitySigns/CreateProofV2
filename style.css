@@ -410,6 +410,9 @@ body {
   overflow-y: hidden;
   padding-left: 15px;
   padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .id_wo_logo {
@@ -743,7 +746,5 @@ body {
 }
 
 .page_number {
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
+  color: var(--id-danger);
 }
