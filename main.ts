@@ -17,7 +17,6 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     const jobName = job.getName(false);
     // get the jobs dataset path
     const standardizedDataPath: string = await job.getDataset("standardizedData", AccessLevel.ReadOnly)
-    const orderDetailsDataPath: string = await job.getDataset("orderDetails", AccessLevel.ReadOnly)
     const revisionDataPath: string = await job.getDataset("revisionData", AccessLevel.ReadOnly)
 
 
@@ -30,11 +29,9 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
 
     // Read the file synchronously
     const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
-    const orderDetailsJsonData = fs.readFileSync(orderDetailsDataPath, 'utf-8');
     const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
     const standardizedData = JSON.parse(jsonData);
     const revisionData = JSON.parse(revisionJsonData);
-    const orderData = JSON.parse(orderDetailsJsonData);
 
     if (!standardizedData) {
       await logger("** No Standardized data could be found", true)
@@ -43,11 +40,32 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     if (!revisionData) {
       await logger("** No Revision data could be found", true)
     }
+    let orderDetailsDataPath: any
+    let orderDetailsJsonData: any
+    let orderData: any
+
+    if (standardizedData.inputType === "weborder") {
+      orderDetailsDataPath = await job.getDataset("orderDetails", AccessLevel.ReadOnly)
+      orderDetailsJsonData = fs.readFileSync(orderDetailsDataPath, 'utf-8');
+      orderData = JSON.parse(orderDetailsJsonData);
+    } else {
+      // hardcode for corebridge and submit point
+      orderData = {
+        needToCombine: false,
+        numberToGroup: 1,
+        lineItemNumber: 1,
+        orderNumber: standardizedData.orderNumber, // will be used for moving job to folder
+        orderItemNumber: 1,
+        jobNumber: undefined,
+        shippingType: undefined
+      }
+    }
+
 
     let isJobDoubleSided = standardizedData?.itemInfo?.itemPrintedSides.toLowerCase().includes('double')
     let previewImageSrc = standardizedData?.itemInfo?.ItemPreviewFile // array
     await logger(`[Create Work Order]: here is the preview img: ${previewImageSrc}`)
-    await logger(`[Create Work Order]: Order Detail Json: ${JSON.stringify(orderDetailsJsonData)}`)
+    await logger(`[Create Work Order]: Order Detail Json: ${JSON.stringify(orderData)}`)
     // Build HTML
     const builtHtml = createProofHtml(standardizedData, revisionData, orderData, previewImageSrc, isJobDoubleSided)
 
