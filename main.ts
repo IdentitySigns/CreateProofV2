@@ -23,9 +23,6 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     if (!standardizedDataPath) {
       await logger("** Could not find the path for the standardized data", true)
     }
-    if (!orderDetailsDataPath) {
-      await logger("** Could not find the path for the order details data", true)
-    }
 
     // Read the file synchronously
     const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
@@ -44,7 +41,9 @@ async function jobArrived(s: Switch, flowElement: FlowElement, job: Job) {
     let orderDetailsJsonData: any
     let orderData: any
 
+    await logger(`[Create Work Order]: Input type - ${standardizedData.inputType}`)
     if (standardizedData.inputType === "weborder") {
+      await logger(`[Create Work Order]: Web Order - ${standardizedData.inputType}`)
       orderDetailsDataPath = await job.getDataset("orderDetails", AccessLevel.ReadOnly)
       orderDetailsJsonData = fs.readFileSync(orderDetailsDataPath, 'utf-8');
       orderData = JSON.parse(orderDetailsJsonData);

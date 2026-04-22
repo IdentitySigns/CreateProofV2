@@ -41,31 +41,47 @@ async function jobArrived(s, flowElement, job) {
         const jobName = job.getName(false);
         // get the jobs dataset path
         const standardizedDataPath = await job.getDataset("standardizedData", AccessLevel.ReadOnly);
-        const orderDetailsDataPath = await job.getDataset("orderDetails", AccessLevel.ReadOnly);
         const revisionDataPath = await job.getDataset("revisionData", AccessLevel.ReadOnly);
         if (!standardizedDataPath) {
             await logger("** Could not find the path for the standardized data", true);
         }
-        if (!orderDetailsDataPath) {
-            await logger("** Could not find the path for the order details data", true);
-        }
         // Read the file synchronously
         const jsonData = fs.readFileSync(standardizedDataPath, 'utf-8');
-        const orderDetailsJsonData = fs.readFileSync(orderDetailsDataPath, 'utf-8');
         const revisionJsonData = fs.readFileSync(revisionDataPath, 'utf-8');
         const standardizedData = JSON.parse(jsonData);
         const revisionData = JSON.parse(revisionJsonData);
-        const orderData = JSON.parse(orderDetailsJsonData);
         if (!standardizedData) {
             await logger("** No Standardized data could be found", true);
         }
         if (!revisionData) {
             await logger("** No Revision data could be found", true);
         }
+        let orderDetailsDataPath;
+        let orderDetailsJsonData;
+        let orderData;
+        await logger(`[Create Work Order]: Input type - ${standardizedData.inputType}`);
+        if (standardizedData.inputType === "weborder") {
+            await logger(`[Create Work Order]: Web Order - ${standardizedData.inputType}`);
+            orderDetailsDataPath = await job.getDataset("orderDetails", AccessLevel.ReadOnly);
+            orderDetailsJsonData = fs.readFileSync(orderDetailsDataPath, 'utf-8');
+            orderData = JSON.parse(orderDetailsJsonData);
+        }
+        else {
+            // hardcode for corebridge and submit point
+            orderData = {
+                needToCombine: false,
+                numberToGroup: 1,
+                lineItemNumber: 1,
+                orderNumber: standardizedData.orderNumber,
+                orderItemNumber: 1,
+                jobNumber: undefined,
+                shippingType: undefined
+            };
+        }
         let isJobDoubleSided = (_a = standardizedData === null || standardizedData === void 0 ? void 0 : standardizedData.itemInfo) === null || _a === void 0 ? void 0 : _a.itemPrintedSides.toLowerCase().includes('double');
         let previewImageSrc = (_b = standardizedData === null || standardizedData === void 0 ? void 0 : standardizedData.itemInfo) === null || _b === void 0 ? void 0 : _b.ItemPreviewFile; // array
         await logger(`[Create Work Order]: here is the preview img: ${previewImageSrc}`);
-        await logger(`[Create Work Order]: Order Detail Json: ${JSON.stringify(orderDetailsJsonData)}`);
+        await logger(`[Create Work Order]: Order Detail Json: ${JSON.stringify(orderData)}`);
         // Build HTML
         const builtHtml = (0, createProofHtml_1.createProofHtml)(standardizedData, revisionData, orderData, previewImageSrc, isJobDoubleSided);
         // log proof HTML for dev
