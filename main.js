@@ -23,7 +23,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-ignore-next-line: no types available
 const fs = __importStar(require("fs"));
 const tmp = __importStar(require("tmp"));
 const createProofHtml_1 = require("./helpers/createProofHtml");

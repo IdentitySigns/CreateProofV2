@@ -1,4 +1,3 @@
-// @ts-ignore-next-line: no types available
 import * as fs from "fs";
 import * as tmp from "tmp";
 import { createProofHtml } from "./helpers/createProofHtml";

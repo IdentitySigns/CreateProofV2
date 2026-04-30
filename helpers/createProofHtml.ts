@@ -179,10 +179,17 @@ export const createProofHtml = (data: any, revisionData: any, orderData: any, pr
         <small>Color Specifications</small>
         </div>
         <div class="wo_f_bt_col_body color_specs">
-        <div class=wo_f_bt_col_body_img_cont>
-        <img class=wo_f_bt_col_body_img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/full-color-print-2.png alt="Color Specs">
-        <p class=id_po_text>Full Color Print</p>
-        </div>
+        ${data?.itemInfo?.itemPrinting? `
+            <div class=wo_f_bt_col_body_img_cont>
+                <img class="wo_f_bt_col_body_img" src=${data?.itemInfo?.itemPrinting.printPreview} alt="Color Specs"/>
+                <p class=id_po_text>${data?.itemInfo?.itemPrinting.printName}</p>
+            </div>
+            `:`
+            <div class=wo_f_bt_col_body_img_cont>
+                <img class=wo_f_bt_col_body_img src=https://identitysigns-x3-fai8o.your-cloudlab.com/media/wysiwyg/IdentitySigns/WorkOrderAssets/full-color-print-2.png alt="Color Specs">
+                <p class=id_po_text>Full Color Print</p>
+            </div>
+            `}
         </div>
         </div>
         <div class="wo_f_bt_col materials">
